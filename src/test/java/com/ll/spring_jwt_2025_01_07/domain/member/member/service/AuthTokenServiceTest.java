@@ -2,9 +2,7 @@ package com.ll.spring_jwt_2025_01_07.domain.member.member.service;
 
 import com.ll.spring_jwt_2025_01_07.domain.member.member.entity.Member;
 import com.ll.spring_jwt_2025_01_07.standard.util.Ut;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,21 +40,21 @@ public class AuthTokenServiceTest {
     @Test
     @DisplayName("jjwt 로 JWT 생성, {name=\"Paul\", age=23}")
     void t2() {
-        Claims claims = Jwts.claims()
-                .add("name", "Paul")
-                .add("age", 23)
-                .build();
-
         Date issuedAt = new Date();
         Date expiration = new Date(issuedAt.getTime() + 1000L * expireSeconds);
 
         Key secretKey = Keys.hmacShaKeyFor(secret.getBytes());
 
         String jwt = Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(issuedAt)
-                .setExpiration(expiration)
-                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .claims(
+                        Map.of(
+                                "name", "Paul",
+                                "age", 23
+                        )
+                )
+                .issuedAt(issuedAt)
+                .expiration(expiration)
+                .signWith(secretKey)
                 .compact();
 
         assertThat(jwt).isNotBlank();
