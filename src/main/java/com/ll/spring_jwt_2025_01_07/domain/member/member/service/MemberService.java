@@ -53,6 +53,10 @@ public class MemberService {
         return authTokenService.genAccessToken(member);
     }
 
+    public String genAuthToken(Member member) {
+        return genAccessToken(member);
+    }
+
     public Member getMemberFromAccessToken(String accessToken) {
         Map<String, Object> payload = authTokenService.payload(accessToken);
 

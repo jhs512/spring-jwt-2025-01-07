@@ -267,12 +267,12 @@ public class ApiV1MemberControllerTest {
     @DisplayName("내 정보, with user1")
     void t9() throws Exception {
         Member actor = memberService.findByUsername("user2").get();
-        String actorAccessToken = memberService.genAccessToken(actor);
+        String actorAuthToken = memberService.genAuthToken(actor);
 
         ResultActions resultActions = mvc
                 .perform(
                         get("/api/v1/members/me")
-                                .header("Authorization", "Bearer " + actorAccessToken)
+                                .header("Authorization", "Bearer " + actorAuthToken)
                 )
                 .andDo(print());
 
@@ -290,12 +290,12 @@ public class ApiV1MemberControllerTest {
     @DisplayName("내 정보, with user2")
     void t10() throws Exception {
         Member actor = memberService.findByUsername("user2").get();
-        String actorAccessToken = memberService.genAccessToken(actor);
+        String actorAuthToken = memberService.genAuthToken(actor);
 
         ResultActions resultActions = mvc
                 .perform(
                         get("/api/v1/members/me")
-                                .header("Authorization", "Bearer " + actorAccessToken)
+                                .header("Authorization", "Bearer " + actorAuthToken)
                 )
                 .andDo(print());
 
