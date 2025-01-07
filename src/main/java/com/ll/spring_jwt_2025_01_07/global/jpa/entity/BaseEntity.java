@@ -16,7 +16,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY) // AUTO_INCREMENT
-    @Setter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PROTECTED)
     @EqualsAndHashCode.Include
     private Long id;
 }

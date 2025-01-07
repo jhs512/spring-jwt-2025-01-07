@@ -266,12 +266,13 @@ public class ApiV1MemberControllerTest {
     @Test
     @DisplayName("내 정보, with user1")
     void t9() throws Exception {
-        Member member = memberService.findByUsername("user1").get();
+        Member actor = memberService.findByUsername("user2").get();
+        String actorAccessToken = memberService.genAccessToken(actor);
 
         ResultActions resultActions = mvc
                 .perform(
                         get("/api/v1/members/me")
-                                .header("Authorization", "Bearer " + member.getApiKey())
+                                .header("Authorization", "Bearer " + actorAccessToken)
                 )
                 .andDo(print());
 
@@ -279,21 +280,22 @@ public class ApiV1MemberControllerTest {
                 .andExpect(handler().handlerType(ApiV1MemberController.class))
                 .andExpect(handler().methodName("me"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(member.getId()))
-                .andExpect(jsonPath("$.createDate").value(Matchers.startsWith(member.getCreateDate().toString().substring(0, 25))))
-                .andExpect(jsonPath("$.modifyDate").value(Matchers.startsWith(member.getModifyDate().toString().substring(0, 25))))
-                .andExpect(jsonPath("$.nickname").value(member.getNickname()));
+                .andExpect(jsonPath("$.id").value(actor.getId()))
+                .andExpect(jsonPath("$.createDate").value(Matchers.startsWith(actor.getCreateDate().toString().substring(0, 25))))
+                .andExpect(jsonPath("$.modifyDate").value(Matchers.startsWith(actor.getModifyDate().toString().substring(0, 25))))
+                .andExpect(jsonPath("$.nickname").value(actor.getNickname()));
     }
 
     @Test
     @DisplayName("내 정보, with user2")
     void t10() throws Exception {
-        Member member = memberService.findByUsername("user2").get();
+        Member actor = memberService.findByUsername("user2").get();
+        String actorAccessToken = memberService.genAccessToken(actor);
 
         ResultActions resultActions = mvc
                 .perform(
                         get("/api/v1/members/me")
-                                .header("Authorization", "Bearer " + member.getApiKey())
+                                .header("Authorization", "Bearer " + actorAccessToken)
                 )
                 .andDo(print());
 
@@ -301,19 +303,19 @@ public class ApiV1MemberControllerTest {
                 .andExpect(handler().handlerType(ApiV1MemberController.class))
                 .andExpect(handler().methodName("me"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(member.getId()))
-                .andExpect(jsonPath("$.createDate").value(Matchers.startsWith(member.getCreateDate().toString().substring(0, 25))))
-                .andExpect(jsonPath("$.modifyDate").value(Matchers.startsWith(member.getModifyDate().toString().substring(0, 25))))
-                .andExpect(jsonPath("$.nickname").value(member.getNickname()));
+                .andExpect(jsonPath("$.id").value(actor.getId()))
+                .andExpect(jsonPath("$.createDate").value(Matchers.startsWith(actor.getCreateDate().toString().substring(0, 25))))
+                .andExpect(jsonPath("$.modifyDate").value(Matchers.startsWith(actor.getModifyDate().toString().substring(0, 25))))
+                .andExpect(jsonPath("$.nickname").value(actor.getNickname()));
     }
 
     @Test
-    @DisplayName("내 정보, with wrong api key")
+    @DisplayName("내 정보, with wrong access key")
     void t11() throws Exception {
         ResultActions resultActions = mvc
                 .perform(
                         get("/api/v1/members/me")
-                                .header("Authorization", "Bearer wrong-api-key")
+                                .header("Authorization", "Bearer wrong-access-key")
                 )
                 .andDo(print());
 

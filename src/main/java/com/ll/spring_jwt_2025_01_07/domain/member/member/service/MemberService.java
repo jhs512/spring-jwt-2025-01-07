@@ -6,6 +6,7 @@ import com.ll.spring_jwt_2025_01_07.global.exceptions.ServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -50,5 +51,18 @@ public class MemberService {
 
     public String genAccessToken(Member member) {
         return authTokenService.genAccessToken(member);
+    }
+
+    public Member getMemberFromAccessToken(String accessToken) {
+        Map<String, Object> payload = authTokenService.payload(accessToken);
+
+        if (payload == null) return null;
+
+        long id = (long) payload.get("id");
+        String username = (String) payload.get("username");
+
+        Member member = new Member(id, username);
+
+        return member;
     }
 }

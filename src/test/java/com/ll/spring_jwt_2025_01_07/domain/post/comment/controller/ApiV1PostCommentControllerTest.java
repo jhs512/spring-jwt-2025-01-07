@@ -2,7 +2,6 @@ package com.ll.spring_jwt_2025_01_07.domain.post.comment.controller;
 
 import com.ll.spring_jwt_2025_01_07.domain.member.member.entity.Member;
 import com.ll.spring_jwt_2025_01_07.domain.member.member.service.MemberService;
-import com.ll.spring_jwt_2025_01_07.domain.post.comment.controller.ApiV1PostCommentController;
 import com.ll.spring_jwt_2025_01_07.domain.post.comment.entity.PostComment;
 import com.ll.spring_jwt_2025_01_07.domain.post.post.entity.Post;
 import com.ll.spring_jwt_2025_01_07.domain.post.post.service.PostService;
@@ -70,11 +69,12 @@ public class ApiV1PostCommentControllerTest {
     @DisplayName("댓글 삭제")
     void t2() throws Exception {
         Member actor = memberService.findByUsername("user2").get();
+        String actorAccessToken = memberService.genAccessToken(actor);
 
         ResultActions resultActions = mvc
                 .perform(
                         delete("/api/v1/posts/1/comments/1")
-                                .header("Authorization", "Bearer " + actor.getApiKey())
+                                .header("Authorization", "Bearer " + actorAccessToken)
                 )
                 .andDo(print());
 
@@ -90,11 +90,12 @@ public class ApiV1PostCommentControllerTest {
     @DisplayName("댓글 수정")
     void t3() throws Exception {
         Member actor = memberService.findByUsername("user2").get();
+        String actorAccessToken = memberService.genAccessToken(actor);
 
         ResultActions resultActions = mvc
                 .perform(
                         put("/api/v1/posts/1/comments/1")
-                                .header("Authorization", "Bearer " + actor.getApiKey())
+                                .header("Authorization", "Bearer " + actorAccessToken)
                                 .content("""
                                         {
                                             "content": "내용 new"
@@ -124,11 +125,12 @@ public class ApiV1PostCommentControllerTest {
     @DisplayName("댓글 등록")
     void t4() throws Exception {
         Member actor = memberService.findByUsername("user2").get();
+        String actorAccessToken = memberService.genAccessToken(actor);
 
         ResultActions resultActions = mvc
                 .perform(
                         post("/api/v1/posts/1/comments")
-                                .header("Authorization", "Bearer " + actor.getApiKey())
+                                .header("Authorization", "Bearer " + actorAccessToken)
                                 .content("""
                                         {
                                             "content": "내용 new"
