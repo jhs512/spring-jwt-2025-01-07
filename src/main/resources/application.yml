@@ -1,0 +1,36 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: security-jwt-2025-01-07
+  profiles:
+    active: dev
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    url: jdbc:h2:./db_dev;MODE=MySQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    #url: jdbc:mysql://localhost:3306/restByTdd__dev
+    #username: root
+    #password: lldj123414
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      auto-commit: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.extract: TRACE
+    org.springframework.transaction.interceptor: TRACE
