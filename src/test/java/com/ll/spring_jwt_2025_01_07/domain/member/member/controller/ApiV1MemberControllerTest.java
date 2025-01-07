@@ -2,7 +2,6 @@ package com.ll.spring_jwt_2025_01_07.domain.member.member.controller;
 
 import com.ll.spring_jwt_2025_01_07.domain.member.member.entity.Member;
 import com.ll.spring_jwt_2025_01_07.domain.member.member.service.MemberService;
-import com.ll.spring_jwt_2025_01_07.domain.member.member.controller.ApiV1MemberController;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -156,7 +155,8 @@ public class ApiV1MemberControllerTest {
                 .andExpect(jsonPath("$.data.item.createDate").value(Matchers.startsWith(member.getCreateDate().toString().substring(0, 25))))
                 .andExpect(jsonPath("$.data.item.modifyDate").value(Matchers.startsWith(member.getModifyDate().toString().substring(0, 25))))
                 .andExpect(jsonPath("$.data.item.nickname").value(member.getNickname()))
-                .andExpect(jsonPath("$.data.apiKey").value(member.getApiKey()));
+                .andExpect(jsonPath("$.data.apiKey").value(member.getApiKey()))
+                .andExpect(jsonPath("$.data.accessToken").exists());
     }
 
     @Test
