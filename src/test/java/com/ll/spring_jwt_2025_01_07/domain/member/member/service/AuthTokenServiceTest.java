@@ -1,5 +1,6 @@
 package com.ll.spring_jwt_2025_01_07.domain.member.member.service;
 
+import com.ll.spring_jwt_2025_01_07.domain.member.member.entity.Member;
 import com.ll.spring_jwt_2025_01_07.standard.util.Ut;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -22,6 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @Transactional
 public class AuthTokenServiceTest {
+    @Autowired
+    private MemberService memberService;
     @Autowired
     private AuthTokenService authTokenService;
 
@@ -69,5 +72,17 @@ public class AuthTokenServiceTest {
         assertThat(jwt).isNotBlank();
 
         System.out.println("jwt = " + jwt);
+    }
+
+    @Test
+    @DisplayName("authTokenService.genAccessToken(member);")
+    void t4() {
+        Member memberUser1 = memberService.findByUsername("user1").get();
+
+        String accessToken = authTokenService.genAccessToken(memberUser1);
+
+        assertThat(accessToken).isNotBlank();
+
+        System.out.println("accessToken = " + accessToken);
     }
 }
