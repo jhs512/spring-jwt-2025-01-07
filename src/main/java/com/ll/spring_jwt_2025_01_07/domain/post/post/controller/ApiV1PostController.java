@@ -23,6 +23,23 @@ public class ApiV1PostController {
     private final PostService postService;
     private final Rq rq;
 
+
+    record PostStatisticResBody(
+            long totalPostCount,
+            long totalPublishedPostCount,
+            long totalListedPostCount
+    ) {
+    }
+
+    @GetMapping("/statistic")
+    @Transactional(readOnly = true)
+    public PostStatisticResBody statistic() {
+        return new PostStatisticResBody(
+                10,
+                10,
+                10);
+    }
+
     @GetMapping("/mine")
     @Transactional(readOnly = true)
     public PageDto<PostDto> mine(
