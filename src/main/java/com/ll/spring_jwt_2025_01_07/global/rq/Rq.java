@@ -46,10 +46,9 @@ public class Rq {
                                 .getAuthentication()
                 )
                 .map(Authentication::getPrincipal)
-                .filter(principal -> principal instanceof UserDetails)
-                .map(principal -> (UserDetails) principal)
-                .map(UserDetails::getUsername)
-                .flatMap(memberService::findByUsername)
+                .filter(principal -> principal instanceof SecurityUser)
+                .map(principal -> (SecurityUser) principal)
+                .map(securityUser -> new Member(securityUser.getId(), securityUser.getUsername()))
                 .orElse(null);
     }
 }
