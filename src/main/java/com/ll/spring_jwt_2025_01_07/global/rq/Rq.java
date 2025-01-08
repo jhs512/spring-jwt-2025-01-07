@@ -5,7 +5,6 @@ import com.ll.spring_jwt_2025_01_07.domain.member.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.List;
+import java.util.Optional;
 
 // Request/Response 를 추상화한 객체
 // Request, Response, Cookie, Session 등을 다룬다.
@@ -41,16 +41,16 @@ public class Rq {
     }
 
     public Member getActor() {
-        SecurityContext context = SecurityContextHolder.getContext();
-
-        Authentication authentication = context.getAuthentication();
-
-        if (authentication == null) return null;
-
-        if (authentication.getPrincipal() == null || authentication.getPrincipal() instanceof String) return null;
-
-        UserDetails user = (UserDetails) authentication.getPrincipal();
-        String username = user.getUsername();
-        return memberService.findByUsername(username).get();
+        return Optional.ofNullable(
+                        SecurityContextHolder
+                                .getContext()
+                                .getAuthentication()
+                )
+                .map(Authentication::getPrincipal)
+                .filter(principal -> principal instanceof UserDetails)
+                .map(principal -> (UserDetails) principal)
+                .map(UserDetails::getUsername)
+                .flatMap(memberService::findByUsername)
+                .orElse(null);
     }
 }
