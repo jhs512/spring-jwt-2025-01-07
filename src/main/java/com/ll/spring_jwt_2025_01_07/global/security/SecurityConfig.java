@@ -64,7 +64,7 @@ public class SecurityConfig {
                                             response.setStatus(403);
                                             response.getWriter().write(
                                                     Ut.json.toString(
-                                                            new RsData("403-1", "접근 권한이 없습니다.")
+                                                            new RsData("403-1", "권한이 없습니다.")
                                                     )
                                             );
                                         }

@@ -33,7 +33,7 @@ public class ApiV1PostController {
 
     @GetMapping("/statistics")
     @Transactional(readOnly = true)
-    public PostStatisticsResBody statistic() {
+    public PostStatisticsResBody statistics() {
         Member actor = rq.getActor();
 
         return new PostStatisticsResBody(

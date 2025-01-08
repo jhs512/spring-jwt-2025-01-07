@@ -702,4 +702,39 @@ public class ApiV1PostControllerTest {
                     .andExpect(jsonPath("$.items[%d].listed".formatted(i)).value(post.isListed()));
         }
     }
+
+    @Test
+    @DisplayName("관리자는 통계를 볼 수 있다.")
+    @WithUserDetails("admin")
+    void t23() throws Exception {
+        ResultActions resultActions = mvc
+                .perform(
+                        get("/api/v1/posts/statistics")
+                )
+                .andDo(print());
+
+        resultActions
+                .andExpect(handler().handlerType(ApiV1PostController.class))
+                .andExpect(handler().methodName("statistics"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalPostCount").isNumber())
+                .andExpect(jsonPath("$.totalPublishedPostCount").isNumber())
+                .andExpect(jsonPath("$.totalListedPostCount").isNumber());
+    }
+
+    @Test
+    @DisplayName("일반 유저는 통계를 볼 수 없다.")
+    @WithUserDetails("user1")
+    void t24() throws Exception {
+        ResultActions resultActions = mvc
+                .perform(
+                        get("/api/v1/posts/statistics")
+                )
+                .andDo(print());
+
+        resultActions
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.resultCode").value("403-1"))
+                .andExpect(jsonPath("$.msg").value("권한이 없습니다."));
+    }
 }
