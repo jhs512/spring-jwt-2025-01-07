@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
-import java.util.List;
 import java.util.Optional;
 
 // Request/Response 를 추상화한 객체
@@ -27,7 +26,7 @@ public class Rq {
                 member.getId(),
                 member.getUsername(),
                 "",
-                List.of()
+                member.getAuthorities()
         );
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(

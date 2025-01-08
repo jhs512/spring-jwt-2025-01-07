@@ -4,6 +4,13 @@ import com.ll.spring_jwt_2025_01_07.global.jpa.entity.BaseTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -39,6 +46,22 @@ public class Member extends BaseTime {
     public Member(long id, String username) {
         this.setId(id);
         this.username = username;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getAuthoritiesAsStringList()
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+    }
+
+    public List<String> getAuthoritiesAsStringList() {
+        List<String> authorities = new ArrayList<>();
+
+        if (isAdmin())
+            authorities.add("ADMIN_ACTING");
+
+        return authorities;
     }
 }
 
