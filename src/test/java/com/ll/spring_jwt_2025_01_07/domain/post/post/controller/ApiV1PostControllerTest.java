@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -321,14 +322,11 @@ public class ApiV1PostControllerTest {
 
     @Test
     @DisplayName("글 삭제")
+    @WithUserDetails("user1")
     void t10() throws Exception {
-        Member actor = memberService.findByUsername("user1").get();
-        String actorAuthToken = memberService.genAuthToken(actor);
-
         ResultActions resultActions = mvc
                 .perform(
                         delete("/api/v1/posts/1")
-                                .header("Authorization", "Bearer " + actorAuthToken)
                 )
                 .andDo(print());
 
