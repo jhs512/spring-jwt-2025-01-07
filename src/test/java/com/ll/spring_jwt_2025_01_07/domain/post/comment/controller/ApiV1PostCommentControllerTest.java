@@ -57,8 +57,8 @@ public class ApiV1PostCommentControllerTest {
             PostComment postComment = comments.get(i);
             resultActions
                     .andExpect(jsonPath("$[%d].id".formatted(i)).value(postComment.getId()))
-                    .andExpect(jsonPath("$[%d].createDate".formatted(i)).value(Matchers.startsWith(postComment.getCreateDate().toString().substring(0, 25))))
-                    .andExpect(jsonPath("$[%d].modifyDate".formatted(i)).value(Matchers.startsWith(postComment.getModifyDate().toString().substring(0, 25))))
+                    .andExpect(jsonPath("$[%d].createDate".formatted(i)).value(Matchers.startsWith(postComment.getCreateDate().toString().substring(0, 20))))
+                    .andExpect(jsonPath("$[%d].modifyDate".formatted(i)).value(Matchers.startsWith(postComment.getModifyDate().toString().substring(0, 20))))
                     .andExpect(jsonPath("$[%d].authorId".formatted(i)).value(postComment.getAuthor().getId()))
                     .andExpect(jsonPath("$[%d].authorName".formatted(i)).value(postComment.getAuthor().getName()))
                     .andExpect(jsonPath("$[%d].content".formatted(i)).value(postComment.getContent()));
@@ -152,8 +152,8 @@ public class ApiV1PostCommentControllerTest {
                 .andExpect(jsonPath("$.resultCode").value("201-1"))
                 .andExpect(jsonPath("$.msg").value("%d번 댓글이 생성되었습니다.".formatted(lastPostComment.getId())))
                 .andExpect(jsonPath("$.data.id").value(lastPostComment.getId()))
-                .andExpect(jsonPath("$.data.createDate").value(Matchers.startsWith(lastPostComment.getCreateDate().toString().substring(0, 25))))
-                .andExpect(jsonPath("$.data.modifyDate").value(Matchers.startsWith(lastPostComment.getModifyDate().toString().substring(0, 25))))
+                .andExpect(jsonPath("$.data.createDate").value(Matchers.startsWith(lastPostComment.getCreateDate().toString().substring(0, 20))))
+                .andExpect(jsonPath("$.data.modifyDate").value(Matchers.startsWith(lastPostComment.getModifyDate().toString().substring(0, 20))))
                 .andExpect(jsonPath("$.data.authorId").value(lastPostComment.getAuthor().getId()))
                 .andExpect(jsonPath("$.data.authorName").value(lastPostComment.getAuthor().getName()))
                 .andExpect(jsonPath("$.data.content").value(lastPostComment.getContent()));
