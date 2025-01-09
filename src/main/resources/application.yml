@@ -5,6 +5,9 @@ spring:
     name: security-jwt-2025-01-07
   profiles:
     active: dev
+  web:
+    resources:
+      add-mappings: false
   output:
     ansi:
       enabled: always

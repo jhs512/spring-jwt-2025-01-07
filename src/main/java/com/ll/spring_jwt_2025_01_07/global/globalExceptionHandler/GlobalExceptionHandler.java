@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.Comparator;
 import java.util.NoSuchElementException;
@@ -18,6 +19,19 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<RsData<Void>> handle(NoHandlerFoundException ex) {
+
+        if (AppConfig.isNotProd()) ex.printStackTrace();
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new RsData<>(
+                        "404-1",
+                        "해당 데이터가 존재하지 않습니다."
+                ));
+    }
+
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<RsData<Void>> handle(NoSuchElementException ex) {
 
