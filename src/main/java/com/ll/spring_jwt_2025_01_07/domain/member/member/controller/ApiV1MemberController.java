@@ -7,9 +7,11 @@ import com.ll.spring_jwt_2025_01_07.domain.member.member.service.MemberService;
 import com.ll.spring_jwt_2025_01_07.global.exceptions.ServiceException;
 import com.ll.spring_jwt_2025_01_07.global.rq.Rq;
 import com.ll.spring_jwt_2025_01_07.global.rsData.RsData;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,7 +66,8 @@ public class ApiV1MemberController {
     @PostMapping("/login")
     @Transactional(readOnly = true)
     public RsData<MemberLoginResBody> login(
-            @RequestBody @Valid MemberLoginReqBody reqBody
+            @RequestBody @Valid MemberLoginReqBody reqBody,
+            HttpServletResponse resp
     ) {
         Member member = memberService
                 .findByUsername(reqBody.username)
@@ -75,8 +78,29 @@ public class ApiV1MemberController {
 
         String accessToken = memberService.genAccessToken(member);
 
-        rq.setCookie("accessToken", accessToken);
-        rq.setCookie("apiKey", member.getApiKey());
+        resp.addHeader(
+                "Set-Cookie",
+                ResponseCookie.from("apiKey", member.getApiKey())
+                        .path("/")
+                        .domain("localhost")
+                        .sameSite("Strict")
+                        .secure(true)
+                        .httpOnly(true)
+                        .build()
+                        .toString()
+        );
+
+        resp.addHeader(
+                "Set-Cookie",
+                ResponseCookie.from("accessToken", accessToken)
+                        .path("/")
+                        .domain("localhost")
+                        .sameSite("Strict")
+                        .secure(true)
+                        .httpOnly(true)
+                        .build()
+                        .toString()
+        );
 
         return new RsData<>(
                 "200-1",
