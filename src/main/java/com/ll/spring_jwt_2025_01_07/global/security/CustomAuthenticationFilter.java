@@ -66,7 +66,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
             String newAccessToken = memberService.genAccessToken(member);
 
-            response.setHeader("Authorization", "Bearer " + apiKey + " " + newAccessToken);
+            rq.setHeader("Authorization", "Bearer " + apiKey + " " + newAccessToken);
             rq.setCookie("accessToken", newAccessToken);
         }
 
