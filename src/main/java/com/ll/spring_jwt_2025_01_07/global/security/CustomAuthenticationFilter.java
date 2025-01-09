@@ -21,7 +21,11 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
     private final MemberService memberService;
     private final Rq rq;
 
-    private String[] getAuthTokensFromRequest() {
+
+    record AuthTokens(String apiKey, String accessToken) {
+    }
+
+    private AuthTokens getAuthTokensFromRequest() {
         String authorization = rq.getHeader("Authorization");
 
         if (authorization != null && authorization.startsWith("Bearer ")) {
@@ -29,17 +33,18 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             String[] tokenBits = token.split(" ", 2);
 
             if (tokenBits.length == 2)
-                return new String[]{tokenBits[0], tokenBits[1]};
+                return new AuthTokens(tokenBits[0], tokenBits[1]);
         }
 
         String apiKey = rq.getCookieValue("apiKey");
         String accessToken = rq.getCookieValue("accessToken");
 
         if (apiKey != null && accessToken != null)
-            return new String[]{apiKey, accessToken};
+            return new AuthTokens(apiKey, accessToken);
 
         return null;
     }
+
 
     private void refreshAccessToken(Member member) {
         String newAccessToken = memberService.genAccessToken(member);
@@ -74,15 +79,15 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String[] authTokens = getAuthTokensFromRequest();
+        AuthTokens authTokens = getAuthTokensFromRequest();
 
         if (authTokens == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String apiKey = authTokens[0];
-        String accessToken = authTokens[1];
+        String apiKey = authTokens.apiKey;
+        String accessToken = authTokens.accessToken;
 
         Member member = memberService.getMemberFromAccessToken(accessToken);
 
