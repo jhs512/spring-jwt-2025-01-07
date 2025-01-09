@@ -75,6 +75,9 @@ public class ApiV1MemberController {
 
         String accessToken = memberService.genAccessToken(member);
 
+        rq.setCookie("accessToken", accessToken);
+        rq.setCookie("apiKey", member.getApiKey());
+
         return new RsData<>(
                 "200-1",
                 "%s님 환영합니다.".formatted(member.getName()),
