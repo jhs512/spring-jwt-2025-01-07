@@ -5,6 +5,7 @@ import com.ll.spring_jwt_2025_01_07.domain.member.member.service.MemberService;
 import com.ll.spring_jwt_2025_01_07.global.security.SecurityUser;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,5 +52,16 @@ public class Rq {
                 .map(principal -> (SecurityUser) principal)
                 .map(securityUser -> new Member(securityUser.getId(), securityUser.getUsername()))
                 .orElse(null);
+    }
+
+    public void setCookie(String name, String value) {
+        ResponseCookie cookie = ResponseCookie.from(name, value)
+                .path("/")
+                .domain("localhost")
+                .sameSite("Strict")
+                .secure(true)
+                .httpOnly(true)
+                .build();
+        resp.addHeader("Set-Cookie", cookie.toString());
     }
 }
